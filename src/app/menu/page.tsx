@@ -20,6 +20,16 @@ const drinks = [
 export default function MenuPage() {
   return (
     <div className="min-h-screen bg-black">
+      <header className="w-full flex justify-center items-center py-6">
+        <Image
+          src="/images/vedebar_Logo.png"
+          alt="Vedebar Logo"
+          width={120}
+          height={120}
+          className="h-20 w-auto"
+          priority
+        />
+      </header>
       <div className="flex flex-col w-full">
         {drinks.map((drink, idx) => (
           <div key={idx} className="w-full">
