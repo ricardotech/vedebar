@@ -28,7 +28,7 @@ export default function MenuPage() {
               alt={drink.name}
               width={500}
               height={500}
-              className="w-full h-auto"
+              className="w-full h-auto border border-green-900"
               priority={idx < 4}
             />
           </div>
