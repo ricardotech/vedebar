@@ -8,7 +8,6 @@ export default function Page() {
   const bgImageRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
   
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -30,8 +29,6 @@ export default function Page() {
     gsap.set([bgImageRef.current, overlayRef.current, textRef.current], {
       opacity: 0,
     });
-    gsap.set(headerRef.current, { y: -100, opacity: 0 });
-    gsap.set(mainContentRef.current, { opacity: 0 });
 
     // Phase 1: Background image fade in
     tl.to(bgImageRef.current, {
@@ -99,10 +96,9 @@ export default function Page() {
           duration: 1,
           ease: "power2.inOut"
         }, "-=1")
-        .to(headerRef.current, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
+        .to(textRef.current, {
+          color: "#166534",
+          duration: 0.5,
           ease: "power2.out"
         }, "-=0.5")
         .to(mainContentRef.current, {
@@ -133,12 +129,7 @@ export default function Page() {
         }}
       />
       
-      {/* Overlay */}
-      <div 
-        ref={overlayRef}
-        className="fixed inset-0 w-full h-full"
-        style={{ backgroundColor: "#204F2F" }}
-      />
+
 
       {/* Animated Text */}
       <div className="fixed inset-0 flex items-center justify-center">
@@ -154,33 +145,11 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Header (appears after animation) */}
-      <header 
-        ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm"
-        style={{ 
-          display: animationComplete ? "block" : "none"
-        }}
-      >
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="text-2xl font-bold text-gray-800" style={{ fontFamily: "Georgia, serif" }}>
-            VEDÊ BAR
-          </div>
-          <nav className="hidden md:flex space-x-8">
-            <a href="#menu" className="text-gray-700 hover:text-gray-900 transition-colors">Menu</a>
-            <a href="#sobre" className="text-gray-700 hover:text-gray-900 transition-colors">Sobre</a>
-            <a href="#arte" className="text-gray-700 hover:text-gray-900 transition-colors">Arte</a>
-            <a href="#contato" className="text-gray-700 hover:text-gray-900 transition-colors">Contato</a>
-          </nav>
-        </div>
-      </header>
-
       {/* Main Content (appears after animation) */}
       <main 
         ref={mainContentRef}
         className="relative z-10"
         style={{ 
-          marginTop: animationComplete ? "80px" : "0",
           display: animationComplete ? "block" : "none"
         }}
       >
