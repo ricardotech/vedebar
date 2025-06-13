@@ -15,253 +15,322 @@ export default function Page() {
   const textRef = useRef<HTMLDivElement>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const drinksContainerRef = useRef<HTMLDivElement>(null);
-  const horizontalSectionRef = useRef<HTMLDivElement>(null);
-  
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const stickyLogoRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  const imageScrollRef = useRef<HTMLDivElement>(null);
+  const drinkModalRef = useRef<HTMLDivElement>(null);
+  const drinkModalContentRef = useRef<HTMLDivElement>(null);
+
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [animationVisible, setAnimationVisible] = useState(true); // Toggle for development
+  const [selectedDrink, setSelectedDrink] = useState<typeof drinks[0] | null>(null);
+  const [isDrinkModalOpen, setIsDrinkModalOpen] = useState(false);
 
   const titles = [
-    "BEM-VINDOS",
-    "EXPERIÊNCIA ÚNICA", 
-    "COQUETELARIA & ARTE",
-    "ALMA BRASILEIRA",
+    "Bem-vindos",
+    "Uma experiência única",
+    "Coquetelaria & Arte",
+    "O bar com alma brasileira",
     "VEDÊ BAR"
   ];
 
   const drinks = [
     {
       id: 1,
-      name: "CAIPIRINHA ARTESANAL",
-      description: "Nossa versão clássica com cachaça premium e limões selecionados da fazenda",
-      image: "/bebidas/bebida1.png",
-      price: "28",
-      category: "CLÁSSICOS"
+      name: "Iça Manauara",
+      description: "Cachaça de jambu, cachaça ouro infusionada pixuri, maracujá, amora, xarope de pixuri e finalizado com espuma de açaí com guaraná e pixuri ralado. Doce, frutado, refrescante",
+      image: "/bebidas/bebida1.png"
     },
     {
       id: 2,
-      name: "TROPICÁLIA",
-      description: "Gin brasileiro, maracujá, manjericão e toque de pimenta biquinho",
-      image: "/bebidas/bebida2.png",
-      price: "35",
-      category: "AUTORAIS"
+      name: "Tropicália",
+      description: "Gin brasileiro, maracujá, manjericão e toque de pimenta",
+      image: "/bebidas/bebida2.png"
     },
     {
       id: 3,
-      name: "IPANEMA SUNSET",
-      description: "Vodka premium, açaí, limão siciliano e espuma de coco fresco",
-      image: "/bebidas/bebida3.png",
-      price: "32",
-      category: "PREMIUM"
+      name: "Guigó",
+      description: "Cachaça envelhecida infusionada amburana, vermouth dry, suco de caju, lillet, xarope simples, triple sec. Defumado com casca de caju e amburan",
+      image: "/bebidas/bebida3.png"
     },
     {
       id: 4,
-      name: "AMAZÔNIA",
-      description: "Cachaça envelhecida, cupuaçu, gengibre e mel silvestre do Pará",
-      image: "/bebidas/bebida4.png",
-      price: "38",
-      category: "PREMIUM"
+      name: "Cabruca",
+      description: "Vodka infusionada nibs de cacau, leão do norte, mix de limões, suco de maracujá, xarope de caramelo, clara, finalizado com chocolate amargo. Redescobrindo as maravilhas nativas da mata atlântica, tão rica e poderosa que nos traz calma, alegria e conforta os corações. Leve, aromático, herbal",
+      image: "/bebidas/bebida4.png"
     },
     {
       id: 5,
-      name: "SERTÃO DOURADO",
-      description: "Whiskey nacional, rapadura, limão e ervas nativas do cerrado",
-      image: "/bebidas/bebida5.png",
-      price: "42",
-      category: "PREMIUM"
+      name: "Canindé",
+      description: "Whiskey infusionado casca de jatobá, paratudo, xarope de baru, maracujá, mix de limões, curaçau blue e pasta de camu-camu. Cítrico, refrescante e frutado",
+      image: "/bebidas/bebida5.png"
     },
     {
       id: 6,
-      name: "CARNAVAL",
-      description: "Rum especial, frutas vermelhas, manjericão e champagne francês",
-      image: "/bebidas/bebida6.png",
-      price: "36",
-      category: "CELEBRAÇÃO"
+      name: "King Fashioned",
+      description: "Whiskey infusionado com café, xarope simples, angostura e grãos de café. Seco, aromático, encorpado",
+      image: "/bebidas/bebida6.png"
     },
     {
       id: 7,
-      name: "BOSSA NOVA",
-      description: "Gin artesanal, elderflower, pepino e água tônica premium",
-      image: "/bebidas/bebida7.png",
-      price: "34",
-      category: "AUTORAIS"
+      name: "Ajuba",
+      description: "Drink especial da casa com ingredientes selecionados",
+      image: "/bebidas/bebida7.png"
     },
     {
       id: 8,
-      name: "CERRADO SELVAGEM",
-      description: "Mezcal importado, pequi, limão galego e sal de ervas nativas",
-      image: "/bebidas/bebida8.png",
-      price: "40",
-      category: "SELVAGEM"
+      name: "Negroni Verão",
+      description: "GIN BEG, campari, vermute rosso, suco de laranja e água com gás. Refrescante e amargo",
+      image: "/bebidas/bebida8.png"
     },
     {
       id: 9,
-      name: "RIO DOURADO",
-      description: "Cachaça gold, caju fresco, canela do Ceilão e açúcar mascavo",
-      image: "/bebidas/bebida9.png",
-      price: "30",
-      category: "CLÁSSICOS"
+      name: "Penicilin",
+      description: "Scotch whiskey, gengibre, mix de limões e mel. Seco, aromático",
+      image: "/bebidas/bebida9.png"
     },
     {
       id: 10,
-      name: "PANTANAL",
-      description: "Gin brasileiro, taperebá, capim santo e água mineral com gás",
-      image: "/bebidas/bebida10.png",
-      price: "33",
-      category: "AUTORAIS"
+      name: "Pisco Sour",
+      description: "Pisco reservado, mix de limões, xarope simples, clara pasteurizada e angostura. Cítrico, refrescante",
+      image: "/bebidas/bebida10.png"
     },
     {
-      id: 11,
-      name: "NORDESTE VIBRANTE",
-      description: "Cachaça branca, pitanga, hortelã selvagem e água de coco verde",
-      image: "/bebidas/bebida11.png",
-      price: "29",
-      category: "REGIONAL"
+      id: 13,
+      name: "Negroni Verão",
+      description: "GIN BEG, campari, vermute rosso, suco de laranja e água com gás. Refrescante e amargo",
+      image: "/bebidas/bebida13.jpg"
     },
     {
-      id: 12,
-      name: "MATA ATLÂNTICA",
-      description: "Vodka premium, jabuticaba, tomilho e tônica artesanal",
-      image: "/bebidas/bebida12.png",
-      price: "37",
-      category: "PREMIUM"
+      id: 14,
+      name: "Premium Selection",
+      description: "Drink especial do chef com destilados importados e frutas exóticas",
+      image: "/bebidas/bebida14.jpg"
     }
   ];
 
+  const modalImages = [
+    "/bebidas/bebida1.png",
+    "/bebidas/bebida2.png",
+    "/bebidas/bebida3.png",
+    "/bebidas/bebida4.png",
+    "/bebidas/bebida5.png",
+    "/bebidas/bebida6.png",
+    "/bebidas/bebida7.png",
+    "/bebidas/bebida8.png"
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    document.body.style.overflow = 'hidden';
+    
+    // Animate modal in
+    gsap.set(modalRef.current, { display: 'flex' });
+    gsap.fromTo(modalRef.current, 
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3, ease: "power2.out" }
+    );
+    gsap.fromTo(modalContentRef.current,
+      { scale: 0.8, opacity: 0, y: 50 },
+      { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "power3.out", delay: 0.1 }
+    );
+
+    // Start image scroll animation
+    gsap.to(imageScrollRef.current, {
+      x: "-50%",
+      duration: 30,
+      ease: "none",
+      repeat: -1
+    });
+  };
+
+  const closeModal = () => {
+    gsap.to(modalContentRef.current, {
+      scale: 0.8,
+      opacity: 0,
+      y: 50,
+      duration: 0.3,
+      ease: "power3.in"
+    });
+    gsap.to(modalRef.current, {
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.in",
+      delay: 0.1,
+      onComplete: () => {
+        setIsModalOpen(false);
+        document.body.style.overflow = 'auto';
+        gsap.set(modalRef.current, { display: 'none' });
+      }
+    });
+  };
+
+  const openDrinkModal = (drink: typeof drinks[0]) => {
+    setSelectedDrink(drink);
+    setIsDrinkModalOpen(true);
+    document.body.style.overflow = 'hidden';
+    
+    // Animate modal in
+    gsap.set(drinkModalRef.current, { display: 'flex' });
+    gsap.fromTo(drinkModalRef.current, 
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3, ease: "power2.out" }
+    );
+    gsap.fromTo(drinkModalContentRef.current,
+      { scale: 0.8, opacity: 0, y: 50 },
+      { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "power3.out", delay: 0.1 }
+    );
+  };
+
+  const closeDrinkModal = () => {
+    gsap.to(drinkModalContentRef.current, {
+      scale: 0.8,
+      opacity: 0,
+      y: 50,
+      duration: 0.3,
+      ease: "power3.in"
+    });
+    gsap.to(drinkModalRef.current, {
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.in",
+      delay: 0.1,
+      onComplete: () => {
+        setIsDrinkModalOpen(false);
+        setSelectedDrink(null);
+        document.body.style.overflow = 'auto';
+        gsap.set(drinkModalRef.current, { display: 'none' });
+      }
+    });
+  };
+
   useEffect(() => {
-    if (!containerRef.current) return;
+    // Preload video
+    const video = videoRef.current;
+    if (video) {
+      video.preload = 'auto';
+      
+      const handleCanPlayThrough = () => {
+        setVideoLoaded(true);
+        console.log('Video loaded and ready to play');
+      };
+
+      const handleLoadedData = () => {
+        console.log('Video data loaded');
+      };
+
+      video.addEventListener('canplaythrough', handleCanPlayThrough);
+      video.addEventListener('loadeddata', handleLoadedData);
+      
+      // Start loading the video
+      video.load();
+
+      return () => {
+        video.removeEventListener('canplaythrough', handleCanPlayThrough);
+        video.removeEventListener('loadeddata', handleLoadedData);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!containerRef.current || !animationVisible) {
+      // Skip animation if disabled
+      if (!animationVisible) {
+        setAnimationComplete(true);
+        gsap.set(mainContentRef.current, { opacity: 1 });
+        if (videoLoaded && videoRef.current) {
+          videoRef.current.play().catch(console.error);
+        }
+      }
+      return;
+    }
 
     const tl = gsap.timeline();
 
-    // Initial setup
+    // Initial setup - background starts at 0.25 opacity
     gsap.set(bgImageRef.current, { opacity: 0.15 });
     gsap.set(textRef.current, { opacity: 0 });
     gsap.set(mainContentRef.current, { opacity: 0 });
 
-    // Intro animation
+    // Phase 1: Text animations (no background change)
     titles.forEach((title, index) => {
       const isLast = index === titles.length - 1;
-      
+
       tl.call(() => {
         if (textRef.current) {
           textRef.current.textContent = title;
         }
       })
-      .fromTo(textRef.current, 
-        { 
-          opacity: 0, 
-          y: 50,
-          rotationX: 90
-        },
-        { 
-          opacity: 1, 
-          y: 0,
-          rotationX: 0,
-          duration: 1.2,
-          ease: "power4.out"
-        }
-      );
+        .fromTo(textRef.current,
+          {
+            opacity: 0,
+            y: 30,
+            scale: 0.8
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1.5,
+            ease: "power3.out"
+          }
+        );
 
       if (!isLast) {
         tl.to(textRef.current, {
           opacity: 0,
-          y: -50,
-          rotationX: -90,
-          duration: 0.8,
-          ease: "power4.in"
-        }, "+=1.5");
-      } else {
-        tl.to({}, { duration: 2 })
-        .to(textRef.current, {
-          opacity: 0,
+          y: -30,
           scale: 1.2,
           duration: 1,
-          ease: "power4.in"
-        })
-        .to(mainContentRef.current, {
-          opacity: 1,
-          duration: 1.5,
-          ease: "power2.out"
-        }, "-=0.5")
-        .call(() => {
-          setAnimationComplete(true);
-        });
+          ease: "power3.in"
+        }, "+=2");
+      } else {
+        // Final title stays for a moment then fades out
+        tl.to({}, { duration: 3 })
+          .to(textRef.current, {
+            opacity: 0,
+            y: -50,
+            scale: 1.3,
+            duration: 1.5,
+            ease: "power3.in"
+          })
+          .to(mainContentRef.current, {
+            opacity: 1,
+            duration: 2,
+            ease: "power2.out"
+          }, "-=1")
+          .call(() => {
+            setAnimationComplete(true);
+            // Start video when animation completes and video is loaded
+            if (videoLoaded && videoRef.current) {
+              videoRef.current.play().catch(console.error);
+            }
+          });
       }
     });
 
     return () => {
       tl.kill();
     };
-  }, []);
+  }, [videoLoaded, animationVisible]);
+
+  // Start video when both animation is complete and video is loaded
+  useEffect(() => {
+    if (animationComplete && videoLoaded && videoRef.current) {
+      videoRef.current.play().catch(console.error);
+    }
+  }, [animationComplete, videoLoaded]);
 
   useEffect(() => {
     if (!animationComplete) return;
 
-    // Header animation on scroll
-    gsap.fromTo(headerRef.current,
-      { y: -100, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "bottom 90%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Horizontal scrolling setup
-    if (horizontalSectionRef.current && drinksContainerRef.current) {
-      const horizontalSection = horizontalSectionRef.current;
-      const drinksContainer = drinksContainerRef.current;
-      
-      const scrollWidth = drinksContainer.scrollWidth;
-      const containerWidth = horizontalSection.offsetWidth;
-      
-      gsap.to(drinksContainer, {
-        x: -(scrollWidth - containerWidth),
-        ease: "none",
-        scrollTrigger: {
-          trigger: horizontalSection,
-          start: "top top",
-          end: () => `+=${scrollWidth - containerWidth}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true
-        }
-      });
-    }
-
-    // Drink cards stagger animation
-    const drinkCards = document.querySelectorAll('.drink-card');
-    gsap.fromTo(drinkCards,
-      {
-        opacity: 0,
-        y: 100,
-        rotationY: 45
-      },
-      {
-        opacity: 1,
-        y: 0,
-        rotationY: 0,
-        duration: 1.2,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: horizontalSectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Hero parallax
-    gsap.to(heroRef.current, {
-      yPercent: -30,
+    // Hero parallax effect
+    const heroParallax = gsap.to(heroRef.current, {
+      yPercent: -50,
       ease: "none",
       scrollTrigger: {
         trigger: heroRef.current,
@@ -271,196 +340,588 @@ export default function Page() {
       }
     });
 
+    // Sticky logo animation
+    gsap.set(stickyLogoRef.current, {
+      opacity: 0,
+      y: -50,
+      scale: 0.8
+    });
+
+    ScrollTrigger.create({
+      trigger: heroRef.current,
+      start: "bottom center",
+      end: "bottom top",
+      onEnter: () => {
+        // Logo appears and stays white - now has good contrast with green background
+        gsap.to(stickyLogoRef.current, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: "power3.out"
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(stickyLogoRef.current, {
+          opacity: 0,
+          y: -50,
+          scale: 0.8,
+          duration: 0.4,
+          ease: "power3.in"
+        });
+      }
+    });
+
+    // Drink cards animation
+    const drinkCards = document.querySelectorAll('.drink-card');
+    drinkCards.forEach((card, index) => {
+      gsap.fromTo(card,
+        {
+          opacity: 0,
+          y: 100,
+          scale: 0.8
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          },
+          delay: index * 0.1
+        }
+      );
+
+      // Hover animations
+      const cardElement = card as HTMLElement;
+      cardElement.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+          scale: 1.05,
+          y: -10,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+
+      cardElement.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          scale: 1,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+    });
+
+    // Section animations
+    const sections = document.querySelectorAll('.animated-section');
+    sections.forEach(section => {
+      gsap.fromTo(section,
+        {
+          opacity: 0,
+          y: 60
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [animationComplete]);
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-hidden bg-black">
-      {/* Background */}
-      <div 
+    <div ref={containerRef} className="relative w-full overflow-hidden">
+      {/* Background Image - Fixed opacity */}
+      <div
         ref={bgImageRef}
         className="fixed inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('/bg.jpeg')",
+          backgroundAttachment: "fixed",
           opacity: 0.15
         }}
       />
 
       {/* Intro Animation */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black" 
-           style={{ display: animationComplete ? "none" : "flex" }}>
-        <div
-          ref={textRef}
-          className="text-white text-4xl md:text-6xl lg:text-8xl font-black text-center px-8 tracking-[0.2em] uppercase"
+      {animationVisible && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-sm"
+          style={{ display: animationComplete ? "none" : "flex" }}>
+          <div
+            ref={textRef}
+            className="text-white text-4xl md:text-6xl lg:text-8xl font-bold text-center px-8 tracking-wider"
+            style={{
+              fontFamily: "Georgia, serif",
+              textShadow: "0 8px 32px rgba(0,0,0,0.6)",
+              letterSpacing: "0.05em"
+            }}
+          />
+        </div>
+      )}
+
+      {/* Sticky Logo */}
+      <div
+        ref={stickyLogoRef}
+        className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+        style={{
+          display: animationComplete ? "block" : "none"
+        }}
+      >
+        <h1 className="text-4xl md:text-5xl font-bold text-white transition-colors duration-300"
           style={{
-            fontFamily: "Arial Black, sans-serif",
-            textShadow: "4px 4px 0px #333",
-            transform: "perspective(1000px)"
-          }}
-        />
+            fontFamily: "Georgia, serif",
+            textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+            letterSpacing: "0.05em"
+          }}>
+          VEDÊ
+        </h1>
       </div>
 
-      {/* Fixed Header */}
-      <header 
-        ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-40 bg-black border-b-4 border-white"
-        style={{ display: animationComplete ? "block" : "none" }}
+      {/* Reservation Modal */}
+      <div
+        ref={modalRef}
+        className="fixed inset-0 z-[100] hidden items-center justify-center p-4"
+        style={{ 
+          backdropFilter: 'blur(15px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)'
+        }}
+        onClick={closeModal}
       >
-        <div className="flex justify-between items-center px-8 py-6">
-          <h1 className="text-3xl font-black text-white tracking-[0.3em] uppercase">
-            VEDÊ
-          </h1>
-          <nav className="hidden md:flex space-x-12">
-            <button className="text-white font-bold uppercase tracking-wider hover:bg-white hover:text-black px-4 py-2 transition-all duration-300">
-              MENU
-            </button>
-            <button className="text-white font-bold uppercase tracking-wider hover:bg-white hover:text-black px-4 py-2 transition-all duration-300">
-              RESERVAS
-            </button>
-            <button className="text-white font-bold uppercase tracking-wider hover:bg-white hover:text-black px-4 py-2 transition-all duration-300">
-              CONTATO
-            </button>
-          </nav>
-          <button className="bg-white text-black px-6 py-2 font-black uppercase tracking-wider hover:bg-yellow-400 transition-all duration-300">
-            RESERVE
+        <div 
+          ref={modalContentRef}
+          className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            onClick={closeModal}
+            className="absolute top-6 right-6 z-10 w-12 h-12 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center transition-colors duration-300"
+          >
+            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
+
+          {/* Scrolling Images */}
+          <div className="h-32 overflow-hidden relative bg-gradient-to-r from-green-800 to-green-900">
+            <div 
+              ref={imageScrollRef}
+              className="flex absolute top-0 left-0 h-full"
+              style={{ width: '200%' }}
+            >
+              {[...modalImages, ...modalImages].map((image, index) => (
+                <div key={index} className="h-32 w-32 flex-shrink-0 mx-2">
+                  <img 
+                    src={image} 
+                    alt={`Drink ${index + 1}`}
+                    className="w-full h-full object-cover rounded-lg opacity-80"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Modal Content */}
+          <div className="p-8">
+            <div className="text-center mb-8">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style={{ fontFamily: "Georgia, serif" }}>
+                Reserve sua Mesa
+              </h2>
+              <div className="w-16 h-1 bg-green-800 mx-auto mb-4" />
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Garante sua experiência única no Vedê Bar. Preencha os dados abaixo e entraremos em contato.
+              </p>
+            </div>
+
+            {/* Reservation Form */}
+            <form className="max-w-2xl mx-auto space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nome Completo</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                    placeholder="Seu nome"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
+                  <input
+                    type="tel"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                    placeholder="(11) 99999-9999"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  placeholder="seu@email.com"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Data</label>
+                  <input
+                    type="date"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Horário</label>
+                  <input
+                    type="time"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Pessoas</label>
+                  <select className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+                    <option>1 pessoa</option>
+                    <option>2 pessoas</option>
+                    <option>3 pessoas</option>
+                    <option>4 pessoas</option>
+                    <option>5+ pessoas</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Observações</label>
+                <textarea
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300 resize-none"
+                  placeholder="Alguma preferência ou observação especial?"
+                />
+              </div>
+
+              <div className="text-center pt-4">
+                <button
+                  type="submit"
+                  className="bg-green-800 hover:bg-green-900 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                >
+                  Confirmar Reserva
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main 
+      <main
         ref={mainContentRef}
-        className="relative z-10"
-        style={{ display: animationComplete ? "block" : "none" }}
+        className="relative z-10 min-h-screen"
+        style={{
+          display: animationComplete ? "block" : "none"
+        }}
       >
         {/* Hero Section */}
-        <section ref={heroRef} className="h-screen flex items-center justify-center relative overflow-hidden">
-          <div className="text-center relative z-10">
-            <h1 className="text-8xl md:text-[12rem] lg:text-[16rem] font-black text-white mb-8 tracking-[0.1em] uppercase leading-none" 
+        <section className="flex items-center justify-center min-h-screen w-full">
+          {/* Video Background */}
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            loop
+            muted
+            playsInline
+            style={{ 
+              display: animationComplete ? "block" : "none",
+              filter: "brightness(0.4)",
+              height: "100vh",
+              minHeight: "100vh"
+            }}
+          >
+            <source src="/video2.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Static background for before video loads */}
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('/bg.jpeg')",
+              display: animationComplete && videoLoaded ? "none" : "block",
+              filter: "brightness(0.4)",
+              height: "100vh",
+              minHeight: "100vh"
+            }}
+          />
+
+          <div className="container mx-auto px-6 py-20 text-center relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-8xl md:text-9xl lg:text-[12rem] font-bold text-white tracking-tight leading-none"
                 style={{ 
-                  fontFamily: "Arial Black, sans-serif",
-                  textShadow: "8px 8px 0px #333, 16px 16px 0px #111"
+                  fontFamily: "Georgia, serif", 
+                  textShadow: "0 8px 32px rgba(0,0,0,0.8)",
+                  fontWeight: 900
                 }}>
-              VEDÊ
-            </h1>
-            <div className="w-32 h-2 bg-white mx-auto mb-12" />
-            <p className="text-2xl md:text-4xl text-white font-bold uppercase tracking-[0.2em] mb-16 max-w-4xl mx-auto leading-tight">
-              COQUETELARIA & ARTE<br />
-              <span className="text-yellow-400">EXPERIÊNCIA BRASILEIRA</span>
-            </p>
-            <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
-              <button className="bg-white text-black px-12 py-6 font-black text-xl uppercase tracking-wider hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105">
-                EXPLORAR DRINKS
-              </button>
-              <button className="border-4 border-white text-white hover:bg-white hover:text-black px-12 py-6 font-black text-xl uppercase tracking-wider transition-all duration-300">
-                FAZER RESERVA
-              </button>
+                VEDE
+              </h1>
             </div>
           </div>
         </section>
 
-        {/* Horizontal Scrolling Drinks Section */}
-        <section 
-          ref={horizontalSectionRef}
-          className="relative overflow-hidden bg-gradient-to-r from-green-900 to-green-700"
-        >
-          {/* Section Header */}
-          <div className="absolute top-0 left-0 z-10 p-12 bg-black/80">
-            <h2 className="text-6xl md:text-8xl font-black text-white mb-4 uppercase tracking-[0.1em]">
-              COLEÇÃO
-            </h2>
-            <p className="text-xl text-white/80 font-bold uppercase tracking-wider">
-              DRINKS AUTORAIS
-            </p>
-          </div>
+        {/* Drinks Collection */}
+        <section className="drinks-section py-32 bg-green-800/95 backdrop-blur-sm pb-[20vh] animated-section">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 md:mt-[10vh]" style={{ fontFamily: "Georgia, serif" }}>
+                Nossa Coleção
+              </h2>
+              <div className="w-16 h-1 bg-white mx-auto mb-8" />
+              <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto font-light leading-relaxed">
+                Cada criação é uma obra de arte líquida, <br/>inspirada na riqueza cultural e natural do Brasil
+              </p>
+            </div>
 
-          <div 
-            ref={drinksContainerRef}
-            className="flex items-center py-24 pl-96"
-            style={{ width: 'fit-content' }}
-          >
-            {drinks.map((drink, index) => (
-              <div key={drink.id} className="drink-card flex-shrink-0 mr-12 group cursor-pointer">
-                <div className="w-80 h-[32rem] bg-white border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:shadow-[24px_24px_0px_0px_rgba(0,0,0,1)] hover:transform hover:-translate-x-2 hover:-translate-y-2">
-                  {/* Image Container */}
-                  <div className="h-64 bg-gradient-to-br from-gray-100 to-gray-200 border-b-4 border-black overflow-hidden">
-                    <img 
-                      src={drink.image} 
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
+              {drinks.map((drink, index) => (
+                <div key={drink.id} className="drink-card group cursor-pointer h-full" onClick={() => openDrinkModal(drink)}>
+                  <div className="relative aspect-square overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                    <img
+                      src={drink.image}
                       alt={drink.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       loading="lazy"
                     />
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="p-8 h-64 flex flex-col justify-between">
-                    <div>
-                      <div className="flex justify-between items-start mb-4">
-                        <span className="text-xs font-black uppercase tracking-wider bg-black text-white px-3 py-1">
-                          {drink.category}
-                        </span>
-                        <span className="text-2xl font-black text-black">
-                          R${drink.price}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-black text-black mb-4 leading-tight uppercase tracking-wide">
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-4 text-center">
+                      <h3 className="text-white text-lg md:text-xl font-bold mb-2 leading-tight" style={{ fontFamily: "Georgia, serif" }}>
                         {drink.name}
                       </h3>
-                      <p className="text-sm text-gray-700 font-medium leading-relaxed">
+                      <p className="text-white/90 text-xs md:text-sm leading-relaxed line-clamp-4 mb-3">
                         {drink.description}
                       </p>
                     </div>
-                    
-                    <button className="w-full bg-black text-white py-3 font-black uppercase tracking-wider hover:bg-yellow-400 hover:text-black transition-all duration-300">
-                      PEDIR
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
-            
-            {/* Call to Action Card */}
-            <div className="flex-shrink-0 ml-12">
-              <div className="w-80 h-[32rem] bg-yellow-400 border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
-                <div className="text-center p-8">
-                  <h3 className="text-4xl font-black text-black mb-8 uppercase tracking-wider leading-tight">
-                    VIVA A<br />EXPERIÊNCIA<br />COMPLETA
-                  </h3>
-                  <button className="bg-black text-white px-8 py-4 font-black uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                    RESERVAR MESA
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Experience Section */}
-        <section className="min-h-screen bg-black text-white flex items-center justify-center py-32">
-          <div className="container mx-auto px-8 text-center">
-            <h2 className="text-6xl md:text-8xl font-black mb-12 uppercase tracking-[0.1em]" 
-                style={{ textShadow: "4px 4px 0px #333" }}>
-              RESERVE<br />
-              <span className="text-yellow-400">AGORA</span>
+        <section className="experience-section py-32 bg-black text-white animated-section">
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-5xl md:text-7xl font-bold mb-12 leading-tight" style={{ fontFamily: "Georgia, serif" }}>
+              Viva a experiência
             </h2>
-            <div className="w-32 h-2 bg-white mx-auto mb-12" />
-            <p className="text-xl md:text-2xl text-white/80 max-w-4xl mx-auto mb-16 font-bold uppercase tracking-wider leading-relaxed">
-              UMA NOITE ONDE ARTE, CULTURA E SABORES BRASILEIROS<br />
-              SE ENCONTRAM EM PERFEITA HARMONIA
+            <div className="w-16 h-1 bg-white mx-auto mb-12" />
+            <p className="text-xl md:text-2xl text-white/80 max-w-4xl mx-auto mb-16 font-light leading-relaxed">
+            
             </p>
-            <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
-              <button className="bg-yellow-400 text-black px-16 py-6 font-black text-xl uppercase tracking-wider hover:bg-white transition-all duration-300 transform hover:scale-105">
-                WHATSAPP
-              </button>
-              <button className="border-4 border-white text-white hover:bg-white hover:text-black px-16 py-6 font-black text-xl uppercase tracking-wider transition-all duration-300">
-                LOCALIZAÇÃO
+            <div className="flex justify-center">
+              <button 
+                onClick={openModal}
+                className="bg-white text-black px-12 py-6 rounded-full text-lg font-semibold transition-all duration-500 hover:bg-gray-100 transform hover:scale-105"
+              >
+                Fazer Reserva
               </button>
             </div>
           </div>
         </section>
+
+        {/* Operating Hours Section */}
+        <section className="operating-hours-section py-32 bg-green-800/95 backdrop-blur-sm animated-section">
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-5xl md:text-7xl font-bold text-white mb-12" style={{ fontFamily: "Georgia, serif" }}>
+              Horário de Funcionamento
+            </h2>
+            <div className="w-16 h-1 bg-white mx-auto mb-12" />
+            
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 mb-8">
+                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "Georgia, serif" }}>
+                  Vedê | Coquetelaria & Arte
+                </h3>
+                <p className="text-lg text-white/90 mb-6">
+                </p>
+                <div className="w-12 h-0.5 bg-white/50 mx-auto mb-6" />
+                <p className="text-lg text-white/90 mb-6 font-medium">Quarta a domingo</p>
+                
+                <div className="space-y-3 text-white/90">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Quarta e quinta</span>
+                    <span>18h - 23h</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Sexta</span>
+                    <span>18h - 01h</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Sábado</span>
+                    <span>16h - 01h</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Domingo</span>
+                    <span>15h - 21h</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Google Maps Section */}
+        <section className="maps-section py-32 bg-gray-900 animated-section">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-5xl md:text-7xl font-bold text-white mb-6" style={{ fontFamily: "Georgia, serif" }}>
+                Nossa Localização
+              </h2>
+              <div className="w-16 h-1 bg-white mx-auto mb-8" />
+              <p className="text-xl text-white/80 mb-4">
+                Rua das Figueiras, 1206 - Santo André, SP
+              </p>
+              <p className="text-lg text-white/60">
+                09080-300
+              </p>
+            </div>
+            
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-white rounded-3xl shadow-2xl p-2 overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3654.7394444444445!2d-46.5388888!3d-23.6666667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce42f8b3f9f3f9%3A0x1234567890abcdef!2sRua%20das%20Figueiras%2C%201206%20-%20Santo%20Andr%C3%A9%2C%20SP%2C%2009080-300!5e0!3m2!1spt-BR!2sbr!4v1234567890123"
+                  width="100%"
+                  height="450"
+                  style={{ border: 0, borderRadius: '20px' }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Vedê Bar Location"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-black text-white py-16">
+          <div className="container mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+              {/* Logo and Description */}
+              <div className="text-center md:text-left">
+                <h3 className="text-3xl font-bold mb-4" style={{ fontFamily: "Georgia, serif" }}>
+                  VEDÊ
+                </h3>
+                <p className="text-white/70 leading-relaxed">
+                  Coquetelaria & Arte com alma brasileira. Uma experiência sensorial única onde cada drink conta uma história.
+                </p>
+              </div>
+
+              {/* Contact Info */}
+              <div className="text-center">
+                <h4 className="text-lg font-semibold mb-4">Contato</h4>
+                <div className="space-y-2 text-white/70">
+                  <p>Rua das Figueiras, 1206</p>
+                  <p>Santo André, SP - 09080-300</p>
+                  <p className="mt-4">
+                    <a href="tel:+5511999999999" className="hover:text-white transition-colors">
+                      (11) 99999-9999
+                    </a>
+                  </p>
+                  <p>
+                    <a href="mailto:contato@vedebar.com" className="hover:text-white transition-colors">
+                      contato@vedebar.com
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+              {/* Social and Hours */}
+              <div className="text-center md:text-right">
+                <h4 className="text-lg font-semibold mb-4">Funcionamento</h4>
+                <div className="space-y-1 text-white/70 text-sm">
+                  <p>Quarta e quinta: 18h - 23h</p>
+                  <p>Sexta: 18h - 01h</p>
+                  <p>Sábado: 16h - 01h</p>
+                  <p>Domingo: 15h - 21h</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-white/20 mt-12 pt-8 text-center">
+              <p className="text-white/50 text-sm">
+                &copy; 2024 Vedê Bar. Todos os direitos reservados.
+              </p>
+            </div>
+          </div>
+        </footer>
       </main>
+
+      {/* Individual Drink Modal */}
+      <div
+        ref={drinkModalRef}
+        className="fixed inset-0 z-[110] hidden items-center justify-center p-4"
+        style={{ 
+          backdropFilter: 'blur(15px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)'
+        }}
+        onClick={closeDrinkModal}
+      >
+        <div 
+          ref={drinkModalContentRef}
+          className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            onClick={closeDrinkModal}
+            className="absolute top-6 right-6 z-10 w-12 h-12 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center transition-colors duration-300"
+          >
+            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Modal Content */}
+          <div className="p-8 md:p-12 text-center">
+            {selectedDrink && (
+              <>
+                <div className="mb-8">
+                  <img 
+                    src={selectedDrink.image} 
+                    alt={selectedDrink.name}
+                    className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-2xl mx-auto mb-8 shadow-xl"
+                  />
+                </div>
+                
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight" style={{ fontFamily: "Georgia, serif" }}>
+                  {selectedDrink.name}
+                </h2>
+                
+                <div className="w-16 h-1 bg-green-800 mx-auto mb-8" />
+                
+                <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 max-w-4xl mx-auto font-light leading-relaxed">
+                  {selectedDrink.description}
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
