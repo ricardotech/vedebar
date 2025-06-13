@@ -1,98 +1,238 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { Inter } from "next/font/google";
-import Script from "next/script";
+import React, { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
-export default function Home() {
-  // Array of titles to animate
+export default function Page() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bgImageRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+  
+  const [animationComplete, setAnimationComplete] = useState(false);
+
   const titles = [
-    "Creative Design",
-    "Digital Solutions",
-    "Modern Experiences",
-    "Innovative Ideas",
-    "Bold Visions"
+    "Bem-vindos",
+    "Uma experiência única",
+    "Coquetelaria & Arte",
+    "O bar com alma brasileira",
+    "VEDÊ BAR"
   ];
 
-  const [currentTitle, setCurrentTitle] = useState(0);
-  const titleRef = useRef(null);
-  const containerRef = useRef(null);
-
   useEffect(() => {
-    // Initialize GSAP animation after it's loaded
-    const initAnimation = () => {
-      if (typeof window.gsap !== 'undefined' && titleRef.current) {
-        // Set initial state
-        window.gsap.set(titleRef.current, { y: 0, opacity: 1 });
-        
-        const interval = setInterval(() => {
-          // Animate out current title
-          window.gsap.to(titleRef.current, {
-            y: -100,
-            opacity: 0,
-            duration: 0.7,
-            ease: "power2.inOut",
-            onComplete: () => {
-              // Change title
-              setCurrentTitle(prev => (prev + 1) % titles.length);
-              
-              // Reset position for next title
-              window.gsap.set(titleRef.current, { y: 100, opacity: 0 });
-              
-              // Animate in new title
-              window.gsap.to(titleRef.current, {
-                y: 0,
-                opacity: 1,
-                duration: 0.7,
-                ease: "power2.inOut"
-              });
-            }
-          });
-        }, 3000); // Change title every 3 seconds
-        
-        return () => clearInterval(interval);
-      }
-    };
+    if (!containerRef.current) return;
 
-    // Wait for GSAP to be available
-    if (typeof window !== 'undefined' && typeof window.gsap !== 'undefined') {
-      initAnimation();
-    } else {
-      // If GSAP isn't available immediately, wait a bit
-      const timer = setTimeout(initAnimation, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [titles.length]);
+    const tl = gsap.timeline();
+
+    // Initial setup
+    gsap.set([bgImageRef.current, overlayRef.current, textRef.current], {
+      opacity: 0,
+    });
+    gsap.set(headerRef.current, { y: -100, opacity: 0 });
+    gsap.set(mainContentRef.current, { opacity: 0 });
+
+    // Phase 1: Background image fade in
+    tl.to(bgImageRef.current, {
+      opacity: 0.7,
+      duration: 2,
+      ease: "power2.inOut"
+    })
+    .to(overlayRef.current, {
+      opacity: 0.8,
+      duration: 1,
+      ease: "power2.inOut"
+    }, "-=1");
+
+    // Phase 2: Text animations
+    titles.forEach((title, index) => {
+      const isLast = index === titles.length - 1;
+      
+      tl.call(() => {
+        if (textRef.current) {
+          textRef.current.textContent = title;
+        }
+      })
+      .fromTo(textRef.current, 
+        { 
+          opacity: 0, 
+          y: 50,
+          scale: 0.9 
+        },
+        { 
+          opacity: 1, 
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          ease: "power2.out"
+        }
+      );
+
+      if (!isLast) {
+        tl.to(textRef.current, {
+          opacity: 0,
+          y: -30,
+          scale: 1.1,
+          duration: 0.8,
+          ease: "power2.in"
+        }, "+=1.5");
+      } else {
+        // Phase 3: Hold the final title
+        tl.to({}, { duration: 2 });
+        
+        // Phase 4: Transform to header layout
+        tl.to(textRef.current, {
+          scale: 0.6,
+          y: -window.innerHeight * 0.35,
+          x: -window.innerWidth * 0.3,
+          duration: 1.5,
+          ease: "power2.inOut"
+        })
+        .to(overlayRef.current, {
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          duration: 1,
+          ease: "power2.inOut"
+        }, "-=1")
+        .to(bgImageRef.current, {
+          opacity: 0.3,
+          duration: 1,
+          ease: "power2.inOut"
+        }, "-=1")
+        .to(headerRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.out"
+        }, "-=0.5")
+        .to(mainContentRef.current, {
+          opacity: 1,
+          duration: 1,
+          ease: "power2.out"
+        }, "-=0.5")
+        .call(() => {
+          setAnimationComplete(true);
+        });
+      }
+    });
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
 
   return (
-    <div 
-      ref={containerRef}
-      className="flex items-center justify-center min-h-screen bg-green-600"
-    >
-      <div className="max-w-4xl w-full min-h-[50vh] flex items-center justify-start px-8">
-        <h1 
-          ref={titleRef}
-          className="text-white text-6xl md:text-8xl font-bold tracking-tighter"
-        >
-          {titles[currentTitle]}
-        </h1>
-      </div>
-      
-      {/* GSAP from CDN */}
-      <Script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" 
-        strategy="afterInteractive"
-        onLoad={() => {
-          console.log("GSAP loaded");
+    <div ref={containerRef} className="relative w-full min-h-screen overflow-hidden">
+      {/* Background Image */}
+      <div 
+        ref={bgImageRef}
+        className="fixed inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/bg.jpeg')",
+          backgroundAttachment: "fixed"
         }}
       />
+      
+      {/* Overlay */}
+      <div 
+        ref={overlayRef}
+        className="fixed inset-0 w-full h-full"
+        style={{ backgroundColor: "#204F2F" }}
+      />
+
+      {/* Animated Text */}
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div
+          ref={textRef}
+          className="text-white text-4xl md:text-6xl lg:text-7xl font-bold text-center px-8 tracking-wider"
+          style={{
+            fontFamily: "Georgia, serif",
+            textShadow: "0 4px 20px rgba(0,0,0,0.5)"
+          }}
+        >
+          {/* Text will be dynamically updated */}
+        </div>
+      </div>
+
+      {/* Header (appears after animation) */}
+      <header 
+        ref={headerRef}
+        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm"
+        style={{ 
+          display: animationComplete ? "block" : "none"
+        }}
+      >
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="text-2xl font-bold text-gray-800" style={{ fontFamily: "Georgia, serif" }}>
+            VEDÊ BAR
+          </div>
+          <nav className="hidden md:flex space-x-8">
+            <a href="#menu" className="text-gray-700 hover:text-gray-900 transition-colors">Menu</a>
+            <a href="#sobre" className="text-gray-700 hover:text-gray-900 transition-colors">Sobre</a>
+            <a href="#arte" className="text-gray-700 hover:text-gray-900 transition-colors">Arte</a>
+            <a href="#contato" className="text-gray-700 hover:text-gray-900 transition-colors">Contato</a>
+          </nav>
+        </div>
+      </header>
+
+      {/* Main Content (appears after animation) */}
+      <main 
+        ref={mainContentRef}
+        className="relative z-10"
+        style={{ 
+          marginTop: animationComplete ? "80px" : "0",
+          display: animationComplete ? "block" : "none"
+        }}
+      >
+        <section className="min-h-screen flex items-center justify-center bg-white/90">
+          <div className="container mx-auto px-6 py-20 text-center">
+            <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6" style={{ fontFamily: "Georgia, serif" }}>
+              Vedê | Coquetelaria & Arte
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              🇧🇷 O bar com alma brasileira onde cada drink é uma obra de arte
+            </p>
+            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+              <button className="bg-green-800 hover:bg-green-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                Ver Menu
+              </button>
+              <button className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300">
+                Reservar Mesa
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Additional sections */}
+        <section id="sobre" className="py-20 bg-gray-50">
+          <div className="container mx-auto px-6">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl font-bold text-gray-800 mb-8" style={{ fontFamily: "Georgia, serif" }}>
+                Nossa História
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                No Vedê Bar, celebramos a rica cultura brasileira através de coquetéis únicos e arte local. 
+                Cada drink conta uma história, cada ambiente respira criatividade. Venha viver uma experiência 
+                sensorial completa onde sabores, aromas e arte se encontram.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="arte" className="py-20 bg-white">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-800 mb-4" style={{ fontFamily: "Georgia, serif" }}>
+                Arte & Cultura
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Um espaço dedicado à expressão artística brasileira, onde artistas locais expõem suas obras 
+                e a cultura nacional ganha vida.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
-}
-
-// Add TypeScript declaration for GSAP
-declare global {
-  interface Window {
-    gsap: any;
-  }
 }
