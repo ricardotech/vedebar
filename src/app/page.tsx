@@ -3,10 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TextPlugin } from "gsap/TextPlugin";
 
-// Register ScrollTrigger
+// Register ScrollTrigger and TextPlugin
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, TextPlugin);
 }
 
 export default function Page() {
@@ -16,6 +17,7 @@ export default function Page() {
   const mainContentRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const reservationsVideoRef = useRef<HTMLVideoElement>(null);
   const stickyLogoRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
@@ -26,16 +28,16 @@ export default function Page() {
   const [animationComplete, setAnimationComplete] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [reservationsVideoLoaded, setReservationsVideoLoaded] = useState(false);
   const [animationVisible, setAnimationVisible] = useState(true); // Toggle for development
   const [selectedDrink, setSelectedDrink] = useState<typeof drinks[0] | null>(null);
   const [isDrinkModalOpen, setIsDrinkModalOpen] = useState(false);
 
   const titles = [
-    "Bem-vindos",
     "Uma experiência única",
-    "Coquetelaria & Arte",
-    "O bar com alma brasileira",
-    "VEDÊ BAR"
+    "de coquetelaria e arte",
+    "o bar com alma brasileira",
+    "VEDÊ"
   ];
 
   const drinks = [
@@ -209,31 +211,32 @@ export default function Page() {
   };
 
   useEffect(() => {
-    // Preload video
-    const video = videoRef.current;
-    if (video) {
-      video.preload = 'auto';
-      
-      const handleCanPlayThrough = () => {
-        setVideoLoaded(true);
-        console.log('Video loaded and ready to play');
-      };
+    const mainVideo = videoRef.current;
+    const reservationsVideo = reservationsVideoRef.current;
 
-      const handleLoadedData = () => {
-        console.log('Video data loaded');
-      };
+    const mainCanPlay = () => setVideoLoaded(true);
+    const reservationsCanPlay = () => setReservationsVideoLoaded(true);
 
-      video.addEventListener('canplaythrough', handleCanPlayThrough);
-      video.addEventListener('loadeddata', handleLoadedData);
-      
-      // Start loading the video
-      video.load();
-
-      return () => {
-        video.removeEventListener('canplaythrough', handleCanPlayThrough);
-        video.removeEventListener('loadeddata', handleLoadedData);
-      };
+    if (mainVideo) {
+      mainVideo.preload = 'auto';
+      mainVideo.addEventListener('canplaythrough', mainCanPlay);
+      mainVideo.load();
     }
+
+    if (reservationsVideo) {
+      reservationsVideo.preload = 'auto';
+      reservationsVideo.addEventListener('canplaythrough', reservationsCanPlay);
+      reservationsVideo.load();
+    }
+
+    return () => {
+      if (mainVideo) {
+        mainVideo.removeEventListener('canplaythrough', mainCanPlay);
+      }
+      if (reservationsVideo) {
+        reservationsVideo.removeEventListener('canplaythrough', reservationsCanPlay);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -251,79 +254,76 @@ export default function Page() {
 
     const tl = gsap.timeline();
 
-    // Initial setup - background starts at 0.25 opacity
+    // Initial setup
     gsap.set(bgImageRef.current, { opacity: 0.15 });
-    gsap.set(textRef.current, { opacity: 0 });
     gsap.set(mainContentRef.current, { opacity: 0 });
+    gsap.set(textRef.current, { opacity: 1 }); // Text should be visible for typing
 
-    // Phase 1: Text animations (no background change)
     titles.forEach((title, index) => {
       const isLast = index === titles.length - 1;
 
-      tl.call(() => {
-        if (textRef.current) {
-          textRef.current.textContent = title;
-        }
-      })
-        .fromTo(textRef.current,
-          {
-            opacity: 0,
-            y: 30,
-            scale: 0.8
-          },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 1.5,
-            ease: "power3.out"
-          }
-        );
+      // Typing animation
+      tl.to(textRef.current, {
+        duration: title.length * 0.1, // Adjust speed of typing
+        text: title,
+        ease: "none",
+      });
 
       if (!isLast) {
-        tl.to(textRef.current, {
-          opacity: 0,
-          y: -30,
-          scale: 1.2,
-          duration: 1,
-          ease: "power3.in"
-        }, "+=2");
-      } else {
-        // Final title stays for a moment then fades out
-        tl.to({}, { duration: 3 })
-          .to(textRef.current, {
-            opacity: 0,
-            y: -50,
-            scale: 1.3,
-            duration: 1.5,
-            ease: "power3.in"
-          })
-          .to(mainContentRef.current, {
-            opacity: 1,
-            duration: 2,
-            ease: "power2.out"
-          }, "-=1")
-          .call(() => {
-            setAnimationComplete(true);
-            // Start video when animation completes and video is loaded
-            if (videoLoaded && videoRef.current) {
-              videoRef.current.play().catch(console.error);
-            }
-          });
+        // Wait, then "delete" the text from right to left
+        const deleteVars = { length: title.length };
+        tl.to(deleteVars, {
+            duration: title.length * 0.05, // Adjust speed of deleting
+            length: 0,
+            onUpdate: () => {
+                if (textRef.current) {
+                    textRef.current.textContent = title.substring(0, Math.round(deleteVars.length));
+                }
+            },
+            ease: "none"
+        }, "+=1.5");
       }
     });
+    
+    // Final title stays for a moment then fades out
+    tl.to({}, { duration: 3 })
+      .to(textRef.current, {
+        opacity: 0,
+        y: -50,
+        scale: 1.3,
+        duration: 1.5,
+        ease: "power3.in"
+      })
+      .to(mainContentRef.current, {
+        opacity: 1,
+        duration: 2,
+        ease: "power2.out"
+      }, "-=1")
+      .call(() => {
+        setAnimationComplete(true);
+        // Start videos when animation completes and videos are loaded
+        if (videoLoaded && videoRef.current) {
+          videoRef.current.play().catch(console.error);
+        }
+        if (reservationsVideoLoaded && reservationsVideoRef.current) {
+          reservationsVideoRef.current.play().catch(console.error);
+        }
+      });
 
     return () => {
       tl.kill();
     };
-  }, [videoLoaded, animationVisible]);
+  }, [videoLoaded, animationVisible, reservationsVideoLoaded]);
 
-  // Start video when both animation is complete and video is loaded
+  // Start videos when both animation is complete and videos are loaded
   useEffect(() => {
     if (animationComplete && videoLoaded && videoRef.current) {
       videoRef.current.play().catch(console.error);
     }
-  }, [animationComplete, videoLoaded]);
+    if (animationComplete && reservationsVideoLoaded && reservationsVideoRef.current) {
+      reservationsVideoRef.current.play().catch(console.error);
+    }
+  }, [animationComplete, videoLoaded, reservationsVideoLoaded]);
 
   useEffect(() => {
     if (!animationComplete) return;
@@ -505,41 +505,42 @@ export default function Page() {
       >
         <div 
           ref={modalContentRef}
-          className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
+          className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close Button */}
-          <button
-            onClick={closeModal}
-            className="absolute top-6 right-6 z-10 w-12 h-12 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center transition-colors duration-300"
-          >
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-
-          {/* Scrolling Images */}
-          <div className="h-32 overflow-hidden relative bg-gradient-to-r from-green-800 to-green-900">
-            <div 
-              ref={imageScrollRef}
-              className="flex absolute top-0 left-0 h-full"
-              style={{ width: '200%' }}
+          {/* Static Header */}
+          <div className="flex-shrink-0 relative">
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-6 right-6 z-10 w-12 h-12 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center transition-colors duration-300"
             >
-              {[...modalImages, ...modalImages].map((image, index) => (
-                <div key={index} className="h-32 w-32 flex-shrink-0 mx-2">
-                  <img 
-                    src={image} 
-                    alt={`Drink ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg opacity-80"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
 
-          {/* Modal Content */}
-          <div className="p-8">
-            <div className="text-center mb-8">
+            {/* Scrolling Images */}
+            <div className="h-32 overflow-hidden relative bg-gradient-to-r from-green-800 to-green-900">
+              <div 
+                ref={imageScrollRef}
+                className="flex absolute top-0 left-0 h-full"
+                style={{ width: '200%' }}
+              >
+                {[...modalImages, ...modalImages].map((image, index) => (
+                  <div key={index} className="h-32 w-32 flex-shrink-0 mx-2">
+                    <img 
+                      src={image} 
+                      alt={`Drink ${index + 1}`}
+                      className="w-full h-full object-cover rounded-lg opacity-80"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Header Content */}
+            <div className="p-8 pb-4 text-center">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style={{ fontFamily: "Georgia, serif" }}>
                 Reserve sua Mesa
               </h2>
@@ -548,7 +549,10 @@ export default function Page() {
                 Garante sua experiência única no Vedê Bar. Preencha os dados abaixo e entraremos em contato.
               </p>
             </div>
+          </div>
 
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto px-8">
             {/* Reservation Form */}
             <form className="max-w-2xl mx-auto space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -609,21 +613,27 @@ export default function Page() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Observações</label>
                 <textarea
-                  rows={4}
+                  rows={6}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300 resize-none"
                   placeholder="Alguma preferência ou observação especial?"
                 />
               </div>
 
-              <div className="text-center pt-4">
-                <button
-                  type="submit"
-                  className="bg-green-800 hover:bg-green-900 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105"
-                >
-                  Confirmar Reserva
-                </button>
-              </div>
+              {/* Additional spacing before footer */}
+              <div className="h-4"></div>
             </form>
+          </div>
+
+          {/* Static Footer */}
+          <div className="flex-shrink-0 p-8 pt-4 bg-gradient-to-t from-white to-transparent">
+            <div className="text-center">
+              <button
+                type="submit"
+                className="bg-green-800 hover:bg-green-900 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Confirmar Reserva
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -636,7 +646,64 @@ export default function Page() {
           display: animationComplete ? "block" : "none"
         }}
       >
-        {/* Hero Section */}
+        {/* Experience Section */}
+        <section className="flex items-center justify-center min-h-screen w-full">
+          {/* Video Background */}
+          <video
+            ref={reservationsVideoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            loop
+            muted
+            playsInline
+            style={{ 
+              display: animationComplete && reservationsVideoLoaded ? "block" : "none",
+              filter: "brightness(0.4)",
+              height: "100vh",
+              minHeight: "100vh"
+            }}
+          >
+            <source src="/reservations.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Static background for before video loads */}
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('/bg.jpeg')",
+              display: animationComplete && reservationsVideoLoaded ? "none" : "block",
+              filter: "brightness(0.4)",
+              height: "100vh",
+              minHeight: "100vh"
+            }}
+          />
+
+          <div className="container mx-auto px-6 py-20 text-center relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold max-w-6xl text-white tracking-tight leading-tight mb-12"
+                style={{ 
+                  fontFamily: "Georgia, serif", 
+                  textShadow: "0 8px 32px rgba(0,0,0,0.8)",
+                  fontWeight: 900
+                }}>
+                VIVA A EXPERIÊNCIA VEDÊ NO SEU EVENTO PRIVADO
+              </h1>
+              
+              {/* CTA Button */}
+              <button
+                onClick={openModal}
+                className="bg-green-800 hover:bg-green-900 text-white px-12 py-4 rounded-full text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                style={{
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+                }}
+              >
+                Reservar
+              </button>
+            </div>
+          </div>
+        </section>
+        
         <section className="flex items-center justify-center min-h-screen w-full">
           {/* Video Background */}
           <video
@@ -722,26 +789,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Experience Section */}
-        <section className="experience-section py-32 bg-black text-white animated-section">
-          <div className="container mx-auto px-6 text-center">
-            <h2 className="text-5xl md:text-7xl font-bold mb-12 leading-tight" style={{ fontFamily: "Georgia, serif" }}>
-              Viva a experiência
-            </h2>
-            <div className="w-16 h-1 bg-white mx-auto mb-12" />
-            <p className="text-xl md:text-2xl text-white/80 max-w-4xl mx-auto mb-16 font-light leading-relaxed">
-            
-            </p>
-            <div className="flex justify-center">
-              <button 
-                onClick={openModal}
-                className="bg-white text-black px-12 py-6 rounded-full text-lg font-semibold transition-all duration-500 hover:bg-gray-100 transform hover:scale-105"
-              >
-                Fazer Reserva
-              </button>
-            </div>
-          </div>
-        </section>
 
         {/* Operating Hours Section */}
         <section className="operating-hours-section py-32 bg-green-800/95 backdrop-blur-sm animated-section">
