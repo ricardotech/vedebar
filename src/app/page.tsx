@@ -233,11 +233,14 @@ export default function Page() {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === category
-                        ? 'bg-white text-black'
-                        : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
-                    }`}
+                                         className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+                       selectedCategory === category
+                         ? 'text-white'
+                         : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+                     }`}
+                     style={{
+                       backgroundColor: selectedCategory === category ? "#204F2F" : undefined
+                     }}
                   >
                     {category}
                   </button>
@@ -267,22 +270,19 @@ export default function Page() {
                         {/* Overlay */}
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/60 transition-all duration-500" />
                         
-                        {/* Name */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <h3 className="text-white text-xl md:text-2xl font-light text-center px-4 tracking-wide">
-                            {drink.name}
-                          </h3>
-                        </div>
+                                                 {/* Name - visible by default */}
+                         <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-500">
+                           <h3 className="text-white text-xl md:text-2xl font-light text-center px-4 tracking-wide">
+                             {drink.name}
+                           </h3>
+                         </div>
 
-                        {/* Description on hover */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <h3 className="text-white text-2xl font-light mb-4 text-center">
-                            {drink.name}
-                          </h3>
-                          <p className="text-white/80 text-sm text-center leading-relaxed">
-                            {drink.description}
-                          </p>
-                        </div>
+                         {/* Description on hover */}
+                         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                           <p className="text-white text-sm text-center leading-relaxed">
+                             {drink.description}
+                           </p>
+                         </div>
                       </div>
                     </div>
                   </div>
@@ -350,24 +350,31 @@ export default function Page() {
               </p>
               
               <div className="flex flex-col md:flex-row gap-6 justify-center">
-                <a 
-                  href="tel:+5511999999999"
-                  className="group px-12 py-4 bg-white text-black rounded-full text-lg font-medium transition-all duration-300 hover:bg-white/90 hover:scale-105"
-                >
-                  <span className="group-hover:tracking-wider transition-all duration-300">
-                    Ligar Agora
-                  </span>
-                </a>
-                <a 
-                  href="https://wa.me/5511999999999"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group px-12 py-4 border border-white/30 text-white rounded-full text-lg font-medium transition-all duration-300 hover:bg-white hover:text-black hover:scale-105"
-                >
-                  <span className="group-hover:tracking-wider transition-all duration-300">
-                    WhatsApp
-                  </span>
-                </a>
+                                 <a 
+                   href="tel:+5511999999999"
+                   className="group px-12 py-4 text-white rounded-full text-lg font-medium transition-all duration-300 hover:scale-105"
+                   style={{ backgroundColor: "#204F2F" }}
+                 >
+                   <span className="group-hover:tracking-wider transition-all duration-300">
+                     Ligar Agora
+                   </span>
+                 </a>
+                 <a 
+                   href="https://wa.me/5511999999999"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="group px-12 py-4 border text-white rounded-full text-lg font-medium transition-all duration-300 hover:text-white hover:scale-105"
+                   style={{ 
+                     borderColor: "#204F2F",
+                     backgroundColor: "transparent"
+                   }}
+                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#204F2F"}
+                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                 >
+                   <span className="group-hover:tracking-wider transition-all duration-300">
+                     WhatsApp
+                   </span>
+                 </a>
               </div>
             </div>
           </section>
@@ -447,9 +454,12 @@ export default function Page() {
             </div>
             
             <div className="text-center">
-              <span className="inline-block px-4 py-2 bg-white/20 rounded-full text-sm font-medium">
-                {selectedDrink.category}
-              </span>
+                             <span 
+                 className="inline-block px-4 py-2 rounded-full text-sm font-medium text-white"
+                 style={{ backgroundColor: "#204F2F" }}
+               >
+                 {selectedDrink.category}
+               </span>
             </div>
           </div>
         </div>
