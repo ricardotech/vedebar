@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import IntroAnimation from "../components/IntroAnimation";
 import HeroSection from "../components/HeroSection";
 import DrinksSection from "../components/DrinksSection";
+import EspacosSection from "../components/EspacosSection";
 import ExperienceSection from "../components/ExperienceSection";
 import OperatingHoursSection from "../components/OperatingHoursSection";
 import MapsSection from "../components/MapsSection";
@@ -412,13 +413,16 @@ export default function Page() {
         />
 
         {/* Drinks Collection */}
-        <DrinksSection 
-          drinks={drinks}
-          onDrinkClick={openDrinkModal}
-        />
+                 <DrinksSection 
+           drinks={drinks}
+           onDrinkClick={openDrinkModal}
+         />
 
-        {/* Experience Section */}
-        <ExperienceSection 
+         {/* Nossos Espaços Section */}
+         <EspacosSection />
+
+         {/* Experience Section */}
+         <ExperienceSection 
           reservationsVideoRef={reservationsVideoRef}
           animationComplete={animationComplete}
           reservationsVideoLoaded={reservationsVideoLoaded}
