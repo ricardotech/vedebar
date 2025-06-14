@@ -126,25 +126,25 @@ export const drinks: Drink[] = [
 export const barImages = [
   {
     id: 1,
-    src: "/images/bebida9.png",
+    src: "/images/bar3.jpg",
     alt: "Vista panorâmica do ambiente",
     title: "Ambiente Sofisticado"
   },
   {
     id: 2,
-    src: "/images/bebida10.png", 
+    src: "/images/bar1.jpg", 
     alt: "Balcão principal com iluminação ambiente",
     title: "Balcão Central"
   },
   {
     id: 3,
-    src: "/images/bebida11.png",
+    src: "/images/bar2.jpg",
     alt: "Área lounge com arte brasileira",
     title: "Espaço Lounge"
   },
   {
     id: 4,
-    src: "/images/bebida12.png",
+    src: "/images/bar4.jpg",
     alt: "Galeria de arte com obras locais",
     title: "Galeria de Arte"
   }
