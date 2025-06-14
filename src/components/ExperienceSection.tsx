@@ -16,11 +16,12 @@ export default function ExperienceSection({
   onReserveClick,
 }: ExperienceSectionProps) {
   return (
-    <section className="flex items-center justify-center min-h-screen w-full">
+    <section className="relative flex items-center justify-center min-h-screen w-full overflow-hidden">
       {/* Video Background */}
       <video
         ref={reservationsVideoRef}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        autoPlay
         loop
         muted
         playsInline
@@ -36,7 +37,7 @@ export default function ExperienceSection({
 
       {/* Static background for before video loads */}
       <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
         style={{
           backgroundImage: "url('/bg.jpeg')",
           display: animationComplete && reservationsVideoLoaded ? "none" : "block",

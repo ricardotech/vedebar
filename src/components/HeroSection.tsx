@@ -53,7 +53,7 @@ export default function HeroSection({
               textShadow: "0 8px 32px rgba(0,0,0,0.8)",
               fontWeight: 900
             }}>
-            VEDE
+            VEDÊ
           </h1>
         </div>
       </div>
