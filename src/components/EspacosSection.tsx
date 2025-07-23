@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const espacos = [
   {
@@ -28,6 +28,104 @@ const espacos = [
   },
 ];
 
+// Mobile Carousel Component
+function MobileCarousel({ espacos }: { espacos: typeof espacos }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % espacos.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + espacos.length) % espacos.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="md:hidden max-w-md mx-auto">
+      {/* Dots indicator */}
+      <div className="flex justify-center mb-6 space-x-2">
+        {espacos.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex 
+                ? 'bg-white scale-125' 
+                : 'bg-white/40 hover:bg-white/60'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Carousel container */}
+      <div className="relative">
+        <div className="overflow-hidden rounded-2xl">
+          <div 
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {espacos.map((espaco) => (
+              <div key={espaco.id} className="w-full flex-shrink-0">
+                <div className="relative aspect-[16/10] overflow-hidden shadow-lg">
+                  <img
+                    src={espaco.src}
+                    alt={espaco.alt}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/30" />
+                  
+                  {/* Title */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <h3 className="text-white text-xl font-bold text-center px-4" style={{ fontFamily: "Georgia, serif" }}>
+                      {espaco.title}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Touch/swipe area for navigation */}
+        <div 
+          className="absolute inset-0 flex"
+          onTouchStart={(e) => {
+            const touchStart = e.touches[0].clientX;
+            const handleTouchEnd = (e: TouchEvent) => {
+              const touchEnd = e.changedTouches[0].clientX;
+              const diff = touchStart - touchEnd;
+              
+              if (Math.abs(diff) > 50) { // Minimum swipe distance
+                if (diff > 0) {
+                  nextSlide();
+                } else {
+                  prevSlide();
+                }
+              }
+              
+              document.removeEventListener('touchend', handleTouchEnd);
+            };
+            
+            document.addEventListener('touchend', handleTouchEnd);
+          }}
+        >
+          {/* Left tap area */}
+          <div className="w-1/2 h-full" onClick={prevSlide} />
+          {/* Right tap area */}
+          <div className="w-1/2 h-full" onClick={nextSlide} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function EspacosSection() {
   return (
     <section className="py-32 bg-black animated-section">
@@ -42,7 +140,8 @@ export default function EspacosSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
+        {/* Desktop: Grid layout */}
+        <div className="hidden md:grid grid-cols-2 gap-6 max-w-7xl mx-auto">
           {espacos.map((espaco) => (
             <div key={espaco.id} className="group cursor-pointer">
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl">
@@ -66,6 +165,9 @@ export default function EspacosSection() {
             </div>
           ))}
         </div>
+
+        {/* Mobile: Carousel layout */}
+        <MobileCarousel espacos={espacos} />
       </div>
     </section>
   );
