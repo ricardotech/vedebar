@@ -65,7 +65,7 @@ export default function DrinkModal({
                 {selectedDrink.name}
               </h2>
               
-              <div className="w-16 h-1 bg-green-800 mx-auto mb-8" />
+              <div className="w-16 h-1 mx-auto mb-8" style={{ backgroundColor: 'var(--bar-green)' }} />
               
               <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto font-light leading-relaxed">
                 {selectedDrink.description}

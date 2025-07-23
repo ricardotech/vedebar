@@ -29,10 +29,10 @@ export default function MenuPage() {
           className="h-20 w-auto"
           priority
         />
-        <button className="flex flex-col justify-center items-center w-10 h-10 border border-green-900 rounded bg-black hover:bg-green-950 transition">
-          <span className="block w-6 h-0.5 bg-green-900 mb-1"></span>
-          <span className="block w-6 h-0.5 bg-green-900 mb-1"></span>
-          <span className="block w-6 h-0.5 bg-green-900"></span>
+        <button className="flex flex-col justify-center items-center w-10 h-10 border rounded bg-black hover:opacity-80 transition" style={{ borderColor: 'var(--bar-green)' }}>
+          <span className="block w-6 h-0.5 mb-1" style={{ backgroundColor: 'var(--bar-green)' }}></span>
+          <span className="block w-6 h-0.5 mb-1" style={{ backgroundColor: 'var(--bar-green)' }}></span>
+          <span className="block w-6 h-0.5" style={{ backgroundColor: 'var(--bar-green)' }}></span>
         </button>
       </header>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
@@ -43,7 +43,8 @@ export default function MenuPage() {
               alt={drink.name}
               width={500}
               height={500}
-              className="w-full h-auto border border-green-900 lg:border-0 transition-opacity duration-300 group-hover:opacity-30 group-active:opacity-30"
+              className="w-full h-auto border lg:border-0 transition-opacity duration-300 group-hover:opacity-30 group-active:opacity-30"
+              style={{ borderColor: 'var(--bar-green)' }}
               priority={idx < 4}
             />
 

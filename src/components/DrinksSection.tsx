@@ -16,7 +16,7 @@ interface DrinksSectionProps {
 
 export default function DrinksSection({ drinks, onDrinkClick }: DrinksSectionProps) {
   return (
-    <section className="drinks-section py-32 bg-green-800/95 backdrop-blur-sm pb-[20vh] animated-section">
+    <section className="drinks-section py-32 backdrop-blur-sm pb-[20vh] animated-section" style={{ backgroundColor: 'var(--bar-green-opacity-95)' }}>
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 md:mt-[10vh]" style={{ fontFamily: "Georgia, serif" }}>

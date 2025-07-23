@@ -47,7 +47,7 @@ export default function ReservationModal({
           </button>
 
           {/* Scrolling Images */}
-          <div className="h-32 overflow-hidden relative bg-gradient-to-r from-green-800 to-green-900">
+          <div className="h-32 overflow-hidden relative" style={{ background: `linear-gradient(to right, var(--bar-green), var(--bar-green-dark))` }}>
             <div 
               ref={imageScrollRef}
               className="flex absolute top-0 left-0 h-full"
@@ -70,7 +70,7 @@ export default function ReservationModal({
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4" style={{ fontFamily: "Georgia, serif" }}>
               Reserve o Bar para seu Evento
             </h2>
-            <div className="w-16 h-1 bg-green-800 mx-auto mb-4" />
+            <div className="w-16 h-1 mx-auto mb-4" style={{ backgroundColor: 'var(--bar-green)' }} />
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Transforme o Vedê Bar no cenário perfeito para seu evento privado. Preencha os detalhes e criaremos uma experiência única.
             </p>
@@ -86,7 +86,7 @@ export default function ReservationModal({
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nome do Responsável</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300"
                   placeholder="Seu nome completo"
                 />
               </div>
@@ -94,7 +94,7 @@ export default function ReservationModal({
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Empresa/Organização</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300"
                   placeholder="Nome da empresa (opcional)"
                 />
               </div>
@@ -105,7 +105,7 @@ export default function ReservationModal({
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Telefone</label>
                 <input
                   type="tel"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300"
                   placeholder="(11) 99999-9999"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function ReservationModal({
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300"
                   placeholder="seu@email.com"
                 />
               </div>
@@ -121,7 +121,7 @@ export default function ReservationModal({
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tipo de Evento</label>
-              <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+              <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300">
                 <option value="">Selecione o tipo de evento</option>
                 <option value="corporate">Evento Corporativo</option>
                 <option value="birthday">Aniversário</option>
@@ -138,19 +138,19 @@ export default function ReservationModal({
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Data do Evento</label>
                 <input
                   type="date"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300"
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Horário Início</label>
                 <input
                   type="time"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300"
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Duração</label>
-                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300">
                   <option value="">Duração estimada</option>
                   <option value="2">2 horas</option>
                   <option value="3">3 horas</option>
@@ -164,7 +164,7 @@ export default function ReservationModal({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Número de Convidados</label>
-                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300">
                   <option value="">Quantos convidados?</option>
                   <option value="10-20">10-20 pessoas</option>
                   <option value="21-30">21-30 pessoas</option>
@@ -175,7 +175,7 @@ export default function ReservationModal({
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Área Preferida</label>
-                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300">
                   <option value="">Escolha a área</option>
                   <option value="full-bar">Bar Completo</option>
                   <option value="main-floor">Salão Principal</option>
@@ -189,7 +189,7 @@ export default function ReservationModal({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Orçamento Estimado</label>
-                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300">
                   <option value="">Faixa de orçamento</option>
                   <option value="2000-5000">R$ 2.000 - R$ 5.000</option>
                   <option value="5000-10000">R$ 5.000 - R$ 10.000</option>
@@ -200,7 +200,7 @@ export default function ReservationModal({
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Serviço de Catering</label>
-                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300">
+                <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300">
                   <option value="">Necessita catering?</option>
                   <option value="full-meal">Refeição Completa</option>
                   <option value="appetizers">Petiscos/Aperitivos</option>
@@ -215,7 +215,7 @@ export default function ReservationModal({
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Detalhes do Evento & Necessidades Especiais</label>
               <textarea
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300 resize-none"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus-ring-bar-green focus-ring-bar-green focus:border-transparent transition-all duration-300 resize-none"
                 placeholder="Descreva seu evento, necessidades especiais (decoração, som, iluminação, equipamentos), preferências musicais, restrições alimentares dos convidados, ou qualquer outro detalhe importante..."
               />
             </div>
@@ -230,7 +230,10 @@ export default function ReservationModal({
           <div className="text-center">
             <button
               type="submit"
-              className="bg-green-800 hover:bg-green-900 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              style={{ backgroundColor: 'var(--bar-green)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bar-green-dark)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bar-green)')}
             >
               Solicitar Orçamento
             </button>

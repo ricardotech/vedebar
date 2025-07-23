@@ -14,6 +14,7 @@ import Footer from "../components/Footer";
 import StickyLogo from "../components/StickyLogo";
 import ReservationModal from "../components/ReservationModal";
 import DrinkModal from "../components/DrinkModal";
+import NavigationOverlay from "../components/NavigationOverlay";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -375,6 +376,9 @@ export default function Page() {
         }}
       />
 
+      {/* Navigation Overlay - Always visible */}
+      <NavigationOverlay isVisible={true} />
+
       {/* Intro Animation */}
       <IntroAnimation 
         isVisible={animationVisible && !animationComplete}
@@ -413,31 +417,39 @@ export default function Page() {
         />
 
         {/* Drinks Collection */}
-                 <DrinksSection 
-           drinks={drinks}
-           onDrinkClick={openDrinkModal}
-         />
+        <div id="drinks">
+          <DrinksSection 
+            drinks={drinks}
+            onDrinkClick={openDrinkModal}
+          />
+        </div>
 
          {/* Nossos Espaços Section */}
          <EspacosSection />
 
          {/* Experience Section */}
-         <ExperienceSection 
-          reservationsVideoRef={reservationsVideoRef}
-          animationComplete={animationComplete}
-          reservationsVideoLoaded={reservationsVideoLoaded}
-          onReserveClick={openModal}
-        />
+         <div id="experience">
+           <ExperienceSection 
+            reservationsVideoRef={reservationsVideoRef}
+            animationComplete={animationComplete}
+            reservationsVideoLoaded={reservationsVideoLoaded}
+            onReserveClick={openModal}
+          />
+         </div>
 
 
         {/* Operating Hours Section */}
         <OperatingHoursSection />
 
         {/* Google Maps Section */}
-        <MapsSection />
+        <div id="maps">
+          <MapsSection />
+        </div>
 
         {/* Footer */}
-        <Footer />
+        <div id="footer">
+          <Footer />
+        </div>
       </main>
 
       {/* Individual Drink Modal */}

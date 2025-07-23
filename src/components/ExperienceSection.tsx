@@ -61,11 +61,14 @@ export default function ExperienceSection({
           {/* CTA Button */}
           <button
             onClick={onReserveClick}
-            className="bg-green-800 hover:bg-green-900 text-white px-12 py-4 rounded-full text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-2xl"
+            className="text-white px-12 py-4 rounded-full text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-2xl"
             style={{
+              backgroundColor: 'var(--bar-green)',
               textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bar-green-dark)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bar-green)')}
           >
             Reservar
           </button>

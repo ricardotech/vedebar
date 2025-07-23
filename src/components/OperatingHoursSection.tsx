@@ -4,7 +4,7 @@ import React from "react";
 
 export default function OperatingHoursSection() {
   return (
-    <section className="operating-hours-section py-32 bg-green-800/95 backdrop-blur-sm animated-section">
+    <section className="operating-hours-section py-32 backdrop-blur-sm animated-section" style={{ backgroundColor: 'var(--bar-green-opacity-95)' }}>
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-5xl md:text-7xl font-bold text-white mb-12" style={{ fontFamily: "Georgia, serif" }}>
           Horário de Funcionamento
