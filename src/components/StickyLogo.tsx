@@ -11,9 +11,9 @@ export default function StickyLogo({ stickyLogoRef, animationComplete }: StickyL
   return (
     <div
       ref={stickyLogoRef}
-      className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+      className="hidden"
       style={{
-        display: animationComplete ? "block" : "none"
+        display: "none"
       }}
     >
       <h1 className="text-4xl md:text-5xl font-bold text-white transition-colors duration-300"

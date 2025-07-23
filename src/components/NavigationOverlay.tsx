@@ -32,7 +32,7 @@ export default function NavigationOverlay({ isVisible }: NavigationOverlayProps)
   }
 
   return (
-    <nav className="fixed top-8 left-0 right-0 z-60">
+    <nav className="absolute top-8 left-0 right-0 z-60">
       <div className="flex justify-center px-4">
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8 text-white font-medium text-lg">
