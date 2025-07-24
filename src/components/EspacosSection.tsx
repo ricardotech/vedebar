@@ -70,7 +70,7 @@ function MobileCarousel({ espacos }: { espacos: typeof espacos }) {
           >
             {espacos.map((espaco) => (
               <div key={espaco.id} className="w-full flex-shrink-0">
-                <div className="relative aspect-[16/10] overflow-hidden shadow-lg">
+                <div className="relative aspect-[4/5] overflow-hidden shadow-lg">
                   <img
                     src={espaco.src}
                     alt={espaco.alt}
