@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 
-const espacos = [
+interface EspacoItem {
+  id: number;
+  src: string;
+  alt: string;
+  title: string;
+}
+
+const espacos: EspacoItem[] = [
   {
     id: 1,
     src: "/espaços/balcaoPrincipal.jpg",
@@ -29,7 +36,7 @@ const espacos = [
 ];
 
 // Mobile Carousel Component
-function MobileCarousel({ espacos }: { espacos: typeof espacos }) {
+function MobileCarousel({ espacos }: { espacos: EspacoItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {
