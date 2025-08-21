@@ -22,7 +22,7 @@ export default function DrinksSection({ drinks, onDrinkClick }: DrinksSectionPro
     if (showAll) {
       return drinks.slice(0, 10); // Always max 10 drinks
     }
-    return drinks.slice(0, 4); // Show first 4 drinks initially on mobile
+    return drinks.slice(0, 3); // Show first 3 drinks initially on mobile (1 per row)
   };
   
   const getDesktopDrinks = () => {
@@ -81,8 +81,8 @@ export default function DrinksSection({ drinks, onDrinkClick }: DrinksSectionPro
           ))}
         </div>
 
-        {/* Mobile: 2x2 initially, 2x5 when expanded */}
-        <div className="md:hidden grid grid-cols-2 gap-0 w-full">
+        {/* Mobile: 1 image per row full width */}
+        <div className="md:hidden grid grid-cols-1 gap-0 w-full">
           {getVisibleDrinks().map((drink, index) => (
             <div key={drink.id} className="drink-card group cursor-pointer h-full relative" onClick={() => onDrinkClick(drink)}>
               <div className="relative aspect-square overflow-hidden shadow-lg transition-all duration-500 hover:shadow-2xl">
@@ -118,7 +118,7 @@ export default function DrinksSection({ drinks, onDrinkClick }: DrinksSectionPro
         {/* Mobile buttons */}
         <div className="md:hidden">
           {/* Ver mais button - show when not all drinks are visible */}
-          {!showAll && drinks.length > 4 && (
+          {!showAll && drinks.length > 3 && (
             <div className="flex justify-center py-8" style={{ backgroundColor: '#5b4a1f' }}>
               <button
                 onClick={() => setShowAll(true)}
