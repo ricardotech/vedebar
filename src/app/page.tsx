@@ -48,85 +48,73 @@ export default function Page() {
       id: 1,
       name: "Iça Manauara",
       description: "Cachaça de jambu, cachaça ouro infusionada pixuri, maracujá, amora, xarope de pixuri e finalizado com espuma de açaí com guaraná e pixuri ralado. Doce, frutado, refrescante",
-      image: "/bebidas/bebida1.png"
+      image: "/bebidas/01.jpg"
     },
     {
       id: 2,
       name: "Tropicália",
       description: "Gin brasileiro, maracujá, manjericão e toque de pimenta",
-      image: "/bebidas/bebida2.png"
+      image: "/bebidas/02.jpg"
     },
     {
       id: 3,
       name: "Guigó",
       description: "Cachaça envelhecida infusionada amburana, vermouth dry, suco de caju, lillet, xarope simples, triple sec. Defumado com casca de caju e amburan",
-      image: "/bebidas/bebida3.png"
+      image: "/bebidas/03.jpg"
     },
     {
       id: 4,
       name: "Cabruca",
       description: "Vodka infusionada nibs de cacau, leão do norte, mix de limões, suco de maracujá, xarope de caramelo, clara, finalizado com chocolate amargo. Redescobrindo as maravilhas nativas da mata atlântica, tão rica e poderosa que nos traz calma, alegria e conforta os corações. Leve, aromático, herbal",
-      image: "/bebidas/bebida4.png"
+      image: "/bebidas/04.jpg"
     },
     {
       id: 5,
       name: "Canindé",
       description: "Whiskey infusionado casca de jatobá, paratudo, xarope de baru, maracujá, mix de limões, curaçau blue e pasta de camu-camu. Cítrico, refrescante e frutado",
-      image: "/bebidas/bebida5.png"
+      image: "/bebidas/05.jpg"
     },
     {
       id: 6,
       name: "King Fashioned",
       description: "Whiskey infusionado com café, xarope simples, angostura e grãos de café. Seco, aromático, encorpado",
-      image: "/bebidas/bebida6.png"
+      image: "/bebidas/06.jpg"
     },
     {
       id: 7,
       name: "Ajuba",
       description: "Drink especial da casa com ingredientes selecionados",
-      image: "/bebidas/bebida7.png"
+      image: "/bebidas/07.jpg"
     },
     {
       id: 8,
       name: "Negroni Verão",
       description: "GIN BEG, campari, vermute rosso, suco de laranja e água com gás. Refrescante e amargo",
-      image: "/bebidas/bebida8.png"
+      image: "/bebidas/08.jpg"
     },
     {
       id: 9,
       name: "Penicilin",
       description: "Scotch whiskey, gengibre, mix de limões e mel. Seco, aromático",
-      image: "/bebidas/bebida9.png"
+      image: "/bebidas/09.jpg"
     },
     {
       id: 10,
       name: "Pisco Sour",
       description: "Pisco reservado, mix de limões, xarope simples, clara pasteurizada e angostura. Cítrico, refrescante",
-      image: "/bebidas/bebida10.png"
-    },
-    {
-      id: 13,
-      name: "Negroni Verão",
-      description: "GIN BEG, campari, vermute rosso, suco de laranja e água com gás. Refrescante e amargo",
-      image: "/bebidas/bebida13.jpg"
-    },
-    {
-      id: 14,
-      name: "Premium Selection",
-      description: "Drink especial do chef com destilados importados e frutas exóticas",
-      image: "/bebidas/bebida14.jpg"
+      image: "/bebidas/11.jpg"
     }
   ];
 
   const modalImages = [
-    "/bebidas/bebida1.png",
-    "/bebidas/bebida2.png",
-    "/bebidas/bebida3.png",
-    "/bebidas/bebida4.png",
-    "/bebidas/bebida5.png",
-    "/bebidas/bebida6.png",
-    "/bebidas/bebida7.png",
-    "/bebidas/bebida8.png"
+    "/bebidas/01.jpg",
+    "/bebidas/02.jpg",
+    "/bebidas/03.jpg",
+    "/bebidas/04.jpg",
+    "/bebidas/05.jpg",
+    "/bebidas/06.jpg",
+    "/bebidas/07.jpg",
+    "/bebidas/08.jpg"
   ];
 
   const openModal = () => {
@@ -276,6 +264,7 @@ export default function Page() {
       }
     }
   }, [animationVisible, videoLoaded, reservationsVideoLoaded]);
+>>>>>>> remotes/vedebar/main
 
   // Start videos when both animation is complete and videos are loaded
   useEffect(() => {
@@ -362,6 +351,66 @@ export default function Page() {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [animationComplete]);
+
+  // Scroll-triggered animations
+  useEffect(() => {
+    if (!animationComplete) return;
+
+    // Menu section animation
+    gsap.fromTo(menuSectionRef.current,
+      { opacity: 0, y: 100 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: menuSectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Gallery section animation
+    gsap.fromTo(gallerySectionRef.current,
+      { opacity: 0, y: 100 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: gallerySectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Parallax effect for background
+    gsap.to(bgImageRef.current, {
+      yPercent: -50,
+      ease: "none",
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+
+  }, [animationComplete]);
+
+  const handleDrinkClick = (drink: typeof drinks[0]) => {
+    setSelectedDrink(drink);
+  };
+
+  const closeDrinkModal = () => {
+    setSelectedDrink(null);
+  };
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden">
