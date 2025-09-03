@@ -34,12 +34,14 @@ export default function Page() {
   const imageScrollRef = useRef<HTMLDivElement>(null);
   const drinkModalRef = useRef<HTMLDivElement>(null);
   const drinkModalContentRef = useRef<HTMLDivElement>(null);
+  const menuSectionRef = useRef<HTMLDivElement>(null);
+  const gallerySectionRef = useRef<HTMLDivElement>(null);
 
   const [animationComplete, setAnimationComplete] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [reservationsVideoLoaded, setReservationsVideoLoaded] = useState(false);
-  const [animationVisible, setAnimationVisible] = useState(true); // Toggle for development
+  const [animationVisible] = useState(true); // Toggle for development
   const [selectedDrink, setSelectedDrink] = useState<typeof drinks[0] | null>(null);
   const [isDrinkModalOpen, setIsDrinkModalOpen] = useState(false);
 
@@ -264,23 +266,12 @@ export default function Page() {
       }
     }
   }, [animationVisible, videoLoaded, reservationsVideoLoaded]);
->>>>>>> remotes/vedebar/main
-
-  // Start videos when both animation is complete and videos are loaded
-  useEffect(() => {
-    if (animationComplete && videoLoaded && videoRef.current) {
-      videoRef.current.play().catch(console.error);
-    }
-    if (animationComplete && reservationsVideoLoaded && reservationsVideoRef.current) {
-      reservationsVideoRef.current.play().catch(console.error);
-    }
-  }, [animationComplete, videoLoaded, reservationsVideoLoaded]);
 
   useEffect(() => {
     if (!animationComplete) return;
 
     // Hero parallax effect
-    const heroParallax = gsap.to(heroRef.current, {
+    gsap.to(heroRef.current, {
       yPercent: -50,
       ease: "none",
       scrollTrigger: {
@@ -348,7 +339,7 @@ export default function Page() {
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger: ScrollTrigger) => trigger.kill());
     };
   }, [animationComplete]);
 
@@ -403,14 +394,6 @@ export default function Page() {
     });
 
   }, [animationComplete]);
-
-  const handleDrinkClick = (drink: typeof drinks[0]) => {
-    setSelectedDrink(drink);
-  };
-
-  const closeDrinkModal = () => {
-    setSelectedDrink(null);
-  };
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden">
