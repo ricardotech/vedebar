@@ -34,6 +34,15 @@ export default function NavigationOverlay({ isVisible }: NavigationOverlayProps)
   return (
     <nav className="absolute top-8 left-0 right-0 z-60">
       <div className="flex justify-center px-4">
+        {/* Mobile Logo - Only visible on mobile */}
+        <div className="md:hidden absolute left-4 top-0">
+          <img 
+            src="/VedeLogoWhite.png" 
+            alt="VEDÊ Logo" 
+            className="h-10 w-auto"
+          />
+        </div>
+        
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8 text-white font-medium text-lg">
           <button 

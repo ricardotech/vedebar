@@ -302,23 +302,28 @@ export default function Page() {
       start: "bottom center",
       end: "bottom top",
       onEnter: () => {
-        // Logo appears and stays white - now has good contrast with green background
-        gsap.to(stickyLogoRef.current, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.6,
-          ease: "power3.out"
-        });
+        // Only show sticky logo on desktop (md and up)
+        if (window.innerWidth >= 768) {
+          gsap.to(stickyLogoRef.current, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.6,
+            ease: "power3.out"
+          });
+        }
       },
       onLeaveBack: () => {
-        gsap.to(stickyLogoRef.current, {
-          opacity: 0,
-          y: -50,
-          scale: 0.8,
-          duration: 0.4,
-          ease: "power3.in"
-        });
+        // Only hide sticky logo on desktop (md and up) 
+        if (window.innerWidth >= 768) {
+          gsap.to(stickyLogoRef.current, {
+            opacity: 0,
+            y: -50,
+            scale: 0.8,
+            duration: 0.4,
+            ease: "power3.in"
+          });
+        }
       }
     });
 

@@ -11,7 +11,7 @@ export default function StickyLogo({ stickyLogoRef, animationComplete }: StickyL
   return (
     <div
       ref={stickyLogoRef}
-      className="hidden"
+      className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 hidden md:block py-2"
       style={{
         display: "none"
       }}

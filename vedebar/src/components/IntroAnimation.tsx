@@ -86,7 +86,7 @@ export default function IntroAnimation({ isVisible, onComplete }: IntroAnimation
       {/* Logo */}
       <div className="logo-animation mb-8">
         <img 
-          src="/icon.png" 
+          src="/VedeLogoWhite.png" 
           alt="Vedê Bar Logo" 
           className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 object-contain"
         />
